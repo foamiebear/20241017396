@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>USRP控制平台</title>
+
+        <style>
+            .g-doc {
+                width: 1200px;
+                margin: 20px auto;
+                padding: 20px;
+                border: 1px solid #333;
+                font-size: 14px;
+            }
+
+            .g-hd {
+                display: flex;
+                width: 100%;
+                background-color: rgb(75, 172, 198);
+                border: 1px solid #333;
+            }
+            .g-hd .title {
+                flex: 1;
+                color: #fff;
+                text-align: center;
+                line-height: 50px;
+            }
+            .g-bd .m-pages .page {
+                position: relative;
+                display: none;
+                opacity: 0;
+                padding-top: 50px;
+            }
+            .g-bd .m-pages .page {
+                display: flex;
+                opacity: 1;
+            }
+            .g-bd .main {
+                width: 800px;
+                min-width: 800px;
+            }
+            .g-bd .side {
+                width: 30%;
+                height: max-content;
+                margin-left: 20px;
+                border-left: 1px solid #333;
+                padding: 0 20px 20px;
+            }
+            .m-pages .u-crumb {
+                position: absolute;
+                top: 0;
+                line-height: 50px;
+            }
+            .m-pages .u-crumb span {
+                font-size: 17px;
+                font-weight: bolder;
+            }
+            .m-data {
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .m-data > .m-item {
+                display: flex;
+                align-items: center;
+                width: 50%;
+                height: 75px;
+            }
+
+            .m-data > .m-item > .name {
+                width: 130px;
+                padding: 0px 10px;
+                text-align: center;
+            }
+            .m-data > .m-item > .input {
+                width: 180px;
+                height: 28px;
+                border-width: 2px;
+                padding: 1px 2px;
+                text-align: center;
+            }
+            .m-data > .m-item > select.input {
+                width: 188px;
+                height: 34px;
+            }
+            .m-data > .m-item > .suffix {
+                width: 55px;
+                padding: 0px 10px;
+            }
+
+            .menu-name {
+                margin-left: 15px;
+                line-height: 60px;
+            }
+            .m-menu {
+                display: flex;
+                justify-content: space-between;
+                margin: 0px 15px;
+                padding: 30px;
+                border: 2px solid #333;
+                border-radius: 30px;
+            }
+            .m-menu > .m-item {
+                display: flex;
+                align-items: center;
+            }
+            .m-menu > .m-item .send {
+                margin-right: 20px;
+            }
+            .m-menu button {
+                width: 40px;
+                height: 40px;
+                border-radius: 40px;
+                font-size: 12px;
+            }
+            .m-menu .recv {
+                font-size: 13px;
+            }
+
+            .m-dc {
+                border-bottom: 1px solid #333;
+                margin-bottom: 15px;
+            }
+            .m-dc > span {
+                margin-left: 8px;
+                line-height: 40px;
+            }
+            .m-dc .m-btns {
+                display: flex;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+            .m-dc .m-btns > button {
+                flex: 1;
+                margin: 0px 10px;
+                line-height: 30px;
+            }
+            .m-status {
+                padding-top: 15px;
+                padding-bottom: 15px;
+            }
+            .m-status > .m-item {
+                display: flex;
+                align-items: center;
+                height: 40px;
+            }
+            .m-status > .m-item .light {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: #ccc;
+                border: 1px solid #333;
+                margin-right: 20px;
+            }
+            .m-status > .m-item:first-child .light {
+                background-color: yellow;
+            }
+            .m-status > .m-item:nth-child(2) .light {
+                background-color: green;
+            }
+            .m-status > .m-item:last-child .light {
+                background-color: red;
+            }
+
+            .m-status > .m-item .text {
+                flex: 1;
+                text-align: center;
+            }
+            .m-info {
+                margin-top: 15px;
+            }
+            .m-ind {
+                display: flex;
+                align-items: center;
+            }
+            .m-ind > .m-item {
+                display: flex;
+                align-items: center;
+            }
+            .m-ind > .m-item:first-child {
+                margin-right: 20px;
+            }
+            .m-ind > .m-item .light {
+                width: 30px;
+                height: 10px;
+                border-radius: 1px;
+                background-color: #ccc;
+                border: 1px solid #333;
+                margin-right: 10px;
+            }
+            .m-ind > .m-item:last-child .light {
+                background-color: green;
+            }
+
+            .in-conf,
+            .query-conf {
+                position: absolute;
+                height: 50px;
+                padding: 0 50px;
+                right: 120px;
+                bottom: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app" class="g-doc">
+            <div class="g-hd">
+                <div class="title">USRP控制平台</div>
+            </div>
+            <div class="g-bd">
+                <div class="m-pages">
+                    <div class="page">
+                        <div class="u-crumb">用户配置（ <span>标签页1</span> ）</div>
+                        <div class="main">
+                            <div class="m-data">
+                                <div class="m-item">
+                                    <span class="name">发送频点：</span>
+                                    <input class="input" type="text" name="tf" placeholder="（输入项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">接收频点：</span>
+                                    <input class="input" type="text" name="rf" placeholder="（输入项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">发送增益：</span>
+                                    <input class="input" type="text" name="tg" placeholder="（输入项）" />
+                                    <span class="suffix">dB</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">接收增益：</span>
+                                    <input class="input" type="text" name="rg" placeholder="（输入项）" />
+                                    <span class="suffix">dB</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">模拟发送带宽：</span>
+                                    <input class="input" type="text" name="atb" placeholder="（输入项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">模拟接收带宽：</span>
+                                    <input class="input" type="text" name="arb" placeholder="（输入项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">采样率：</span>
+                                    <input class="input" type="text" name="sr" placeholder="（输入项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">参考时钟：</span>
+                                    <select class="input" name="rc" placeholder="（输入项）">
+                                        <option value="internal">Internal</option>
+                                        <option value="external">External</option>
+                                        <option value="mimo">MIMO</option>
+                                        <option value="gpsdo">GPSDO</option>
+                                    </select>
+                                    <span class="suffix"></span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">参考PPS：</span>
+                                    <select class="input" type="text" name="rp" placeholder="（输入项）">
+                                        <option value="internal">Internal</option>
+                                        <option value="external">External</option>
+                                        <option value="mimo">MIMO</option>
+                                        <option value="gpsdo">GPSDO</option>
+                                    </select>
+                                    <span class="suffix"></span>
+                                </div>
+                                <button class="in-conf">配置参数</button>
+                            </div>
+
+                            <span class="menu-name">发送/接收通道选择</span>
+                            <div class="m-menu">
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="side">
+                            <div class="m-dc">
+                                <span>USBR设备控制：</span>
+                                <div class="m-btns">
+                                    <button class="u-btn">启动</button>
+                                    <button class="u-btn">待机</button>
+                                    <button class="u-btn">关机</button>
+                                </div>
+                            </div>
+                            <div class="m-status">
+                                <div class="m-item">
+                                    <span class="light"></span>
+                                    <span class="text">设备待机指示灯（黄色）</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="light"></span>
+                                    <span class="text">设备工作指示灯（绿色）</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="light"></span>
+                                    <span class="text">设备故障指示灯（红色）</span>
+                                </div>
+                            </div>
+                            <div class="m-info">
+                                <img width="100%" src="./console.png" alt="" srcset="" />
+                                <img width="100%" src="./console1.png" alt="" srcset="" />
+                            </div>
+                            <div class="m-ind">
+                                <div class="m-item">
+                                    <span class="light"></span>
+                                    <span class="text">未运行</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="light"></span>
+                                    <span class="text">正在运行</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="page">
+                        <div class="u-crumb">用户配置（ <span>标签页2</span> ）</div>
+                        <div class="main">
+                            <div class="m-data">
+                                <div class="m-item">
+                                    <span class="name">发送频点：</span>
+                                    <input class="input" disabled type="text" name="tf" placeholder="（显示项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">接收频点：</span>
+                                    <input class="input" disabled type="text" name="rf" placeholder="（显示项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">发送增益：</span>
+                                    <input class="input" disabled type="text" name="tg" placeholder="（显示项）" />
+                                    <span class="suffix">dB</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">接收增益：</span>
+                                    <input class="input" disabled type="text" name="rg" placeholder="（显示项）" />
+                                    <span class="suffix">dB</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">模拟发送带宽：</span>
+                                    <input class="input" disabled type="text" name="atb" placeholder="（显示项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">模拟接收带宽：</span>
+                                    <input class="input" disabled type="text" name="arb" placeholder="（显示项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">采样率：</span>
+                                    <input class="input" disabled type="text" name="sr" placeholder="（显示项）" />
+                                    <span class="suffix">MHz</span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">参考时钟：</span>
+                                    <input class="input" disabled type="text" name="rc" placeholder="（显示项）" />
+                                    <span class="suffix"></span>
+                                </div>
+                                <div class="m-item">
+                                    <span class="name">参考PPS：</span>
+                                    <input class="input" disabled type="text" name="rp" placeholder="（显示项）" />
+                                    <span class="suffix"></span>
+                                </div>
+                                <button class="query-conf">查询配置</button>
+                            </div>
+
+                            <span class="menu-name">发送/接收通道选择</span>
+                            <div class="m-menu">
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                                <div class="m-item">
+                                    <button class="send">TX/<br />RX0</button>
+                                    <button class="recv">RX1</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var usrp = {
+                _tabs: null,
+                data: { sendFreq: "123.856", recvFreq: "12331.54", sendGain: "52", recvGain: "56", sendBandwidth: "72", recvBandwidth: "245", sampleRate: "36.2", refClock: "gpsdo", refPps: "mimo" },
+            };
+
+            (() => {
+                let pages = document.querySelectorAll(".m-pages .page");
+
+                Object.defineProperty(usrp, "tabs", {
+                    get: function () {
+                        return this._tabs;
+                    },
+                    set: function (val) {
+                        this._tabs = switchPage(this._tabs, val);
+                    },
+                });
+
+                usrp.tabs = 1;
+
+                function switchPage(prev, curr) {
+                    if (prev < 0 || prev >= 2) {
+                        return curr;
+                    }
+                    if (prev === null || prev === undefined) {
+                        prev = 1;
+                    }
+
+                    if (pages.length > 0) {
+                        if (prev > 0) {
+                            pages[prev - 1].className = "page";
+                        }
+                        if (curr > 0 && curr <= pages.length) {
+                            pages[curr - 1].className = "page active";
+                        }
+                    }
+                    return curr;
+                }
+            })();
+
+            (() => {
+                let inputs = document.querySelectorAll(".m-data > .m-item > .input");
+
+                // 频点检查
+                [0, 1, 9, 10].forEach((index) => {
+                    inputs[index].addEventListener("blur", checkFrequency);
+                });
+
+                // 增益检查
+                [2, 3, 11, 12].forEach((index) => {
+                    inputs[index].addEventListener("blur", checkGain);
+                });
+
+                // 模拟带宽检查
+                [4, 5, 13, 14].forEach((index) => {
+                    inputs[index].addEventListener("blur", checkBandwidth);
+                });
+
+                // 采样率检查
+                [6, 15].forEach((index) => {
+                    inputs[index].addEventListener("blur", checkSampleRate);
+                });
+
+                function checkFrequency() {
+                    if (!validateFrequency(this.value)) {
+                        this.value = null;
+                    }
+                }
+
+                function checkGain() {
+                    if (!validateGain(this.value)) {
+                        this.value = null;
+                    }
+                }
+
+                function checkBandwidth() {
+                    if (!validateBandwidth(this.value)) {
+                        this.value = null;
+                    }
+                }
+
+                function checkSampleRate() {
+                    if (!validateSampleRate(this.value)) {
+                        this.value = null;
+                    }
+                }
+
+                function validateFrequency(input) {
+                    var regex = /^(?:\d{1,8}(?:\.\d{1,8})?|80000000(?:\.0{1,8})?)$/;
+                    if (input.trim() === "") {
+                        return true;
+                    }
+                    if (regex.test(input)) {
+                        var frequencyMHz = parseFloat(input);
+
+                        if (frequencyMHz >= 1 && frequencyMHz <= 80000000) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                function validateGain(input) {
+                    var regex = /^([0-5]?[0-9]|60)$/;
+                    if (input.trim() === "") {
+                        return true;
+                    }
+
+                    return regex.test(input);
+                }
+
+                function validateBandwidth(input) {
+                    if (input.trim() === "") {
+                        return true;
+                    }
+
+                    return Number.isInteger(Number(input)) && input >= 0 && input <= 400;
+                }
+
+                function validateSampleRate(input) {
+                    let numberInput = Number(input);
+
+                    if (input.trim() === "") {
+                        return true;
+                    }
+
+                    if (typeof numberInput !== "number" || isNaN(numberInput)) {
+                        return false;
+                    }
+                    if (input < 0 || input > 500) {
+                        return false;
+                    }
+
+                    return true;
+                }
+            })();
+
+            let inputs = document.querySelectorAll(".m-data > .m-item > .input");
+
+            function bundle() {
+                let data = {
+                    sendFreq: inputs[0].value,
+                    recvFreq: inputs[1].value,
+                    sendGain: inputs[2].value,
+                    recvGain: inputs[3].value,
+                    sendBandwidth: inputs[4].value,
+                    recvBandwidth: inputs[5].value,
+                    sampleRate: inputs[6].value,
+                    refClock: inputs[7].value,
+                    refPps: inputs[8].value,
+                };
+
+                usrp.data = data;
+            }
+
+            function unbundle() {
+                let data = usrp.data;
+
+                inputs[9].value = data.sendFreq;
+                inputs[10].value = data.recvFreq;
+                inputs[11].value = data.sendGain;
+                inputs[12].value = data.recvGain;
+                inputs[13].value = data.sendBandwidth;
+                inputs[14].value = data.recvBandwidth;
+                inputs[15].value = data.sampleRate;
+                inputs[16].value = data.refClock;
+                inputs[17].value = data.refPps;
+            }
+
+            document.querySelector(".m-data > .in-conf").addEventListener("click", bundle);
+            document.querySelector(".m-data > .query-conf").addEventListener("click", unbundle);
+        </script>
+    </body>
+</html>

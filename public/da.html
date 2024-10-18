@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>用户配置</title>
+        <style>
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .item {
+                margin-bottom: 10px;
+            }
+            label,
+            input[type="text"],
+            button {
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            input[type="text"] {
+                width: calc(100% - 22px);
+            }
+            button {
+                width: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>用户配置（标签页1）</h2>
+        <div class="container">
+            <!-- 第一行 -->
+            <div class="item">
+                <label for="sendFreq">发送频点：</label>
+                <input type="text" id="sendFreq" placeholder="(输入项)" />
+                <span>MHz</span>
+            </div>
+            <div class="item">
+                <label for="receiveFreq">接收频点：</label>
+                <input type="text" id="receiveFreq" placeholder="(输入项)" />
+                <span>MHz</span>
+            </div>
+
+            <!-- 第二行 -->
+            <div class="item">
+                <label for="sendGain">发送增益：</label>
+                <input type="text" id="sendGain" placeholder="(输入项)" />
+                <span>dB</span>
+            </div>
+            <div class="item">
+                <label for="receiveGain">接收增益：</label>
+                <input type="text" id="receiveGain" placeholder="(输入项)" />
+                <span>dB</span>
+            </div>
+
+            <!-- 第三行 -->
+            <div class="item">
+                <label for="simSendBandwidth">模拟发送带宽：</label>
+                <input type="text" id="simSendBandwidth" placeholder="(输入项)" />
+                <span>MHz</span>
+            </div>
+            <div class="item">
+                <label for="simReceiveBandwidth">模拟接收带宽：</label>
+                <input type="text" id="simReceiveBandwidth" placeholder="(输入项)" />
+                <span>MHz</span>
+            </div>
+
+            <!-- 第四行 -->
+            <div class="item">
+                <label for="sampleRate">采样率：</label>
+                <input type="text" id="sampleRate" placeholder="(输入项)" />
+                <span>MHz</span>
+            </div>
+            <div class="item">
+                <label for="referenceClock">参考时钟：</label>
+                <input type="text" id="referenceClock" placeholder="(输入项)" />
+            </div>
+
+            <!-- 第五行 -->
+            <div class="item">
+                <label for="refPps">参考PPS：</label>
+                <input type="text" id="refPps" placeholder="(输入项)" />
+            </div>
+            <div class="item">
+                <button>一键配置</button>
+            </div>
+        </div>
+    </body>
+</html>
