@@ -25,8 +25,14 @@
                 text-align: center;
                 line-height: 50px;
             }
+            .g-bd {
+                position: relative;
+                padding-top: 70px;
+                display: flex;
+            }
             .g-bd .m-pages .page {
                 position: relative;
+                flex-direction: column;
                 display: none;
                 opacity: 0;
             }
@@ -46,20 +52,26 @@
                 padding: 0 20px 20px;
             }
             .u-crumb {
+                display: flex;
+                position: absolute;
+                top: 0;
                 line-height: 50px;
                 padding-top: 20px;
                 padding-left: 20px;
             }
             .u-crumb span {
-                padding: 0px 15px;
-                border-radius: 5px 5px 0 0;
-                line-height: 30px;
+                padding: 0px 20px;
+                line-height: 50px;
                 display: inline-block;
                 border: 1px solid #333;
-                border-bottom: none;
                 font-size: 17px;
-                font-weight: bolder;
-                margin-left: 20px;
+                font-weight: normal;
+            }
+            .u-crumb span:last-child {
+                border-left: none;
+            }
+            .u-crumb span.active {
+                background-color: #ffeacc;
             }
             .m-data {
                 position: relative;
@@ -205,10 +217,10 @@
                 <div class="title">USRP控制平台</div>
             </div>
             <div class="g-bd">
-                <div class="u-crumb">用户配置 <span>标签页1</span> <span>标签页2</span></div>
-                <div class="m-pages">
-                    <div class="page">
-                        <div class="main">
+                <div class="u-crumb"><span class="active">用户配置</span> <span>状态查询</span></div>
+                <div class="main">
+                    <div class="m-pages">
+                        <div class="page">
                             <form class="m-data">
                                 <div class="m-item">
                                     <span class="name">发送频点：</span>
@@ -288,48 +300,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="side">
-                            <div class="m-dc">
-                                <span>USRP设备控制：</span>
-                                <div class="m-btns">
-                                    <button class="u-btn">启动</button>
-                                    <button class="u-btn">待机</button>
-                                    <button class="u-btn">关机</button>
-                                </div>
-                            </div>
-                            <div class="m-status">
-                                <div class="m-item">
-                                    <span class="light"></span>
-                                    <span class="text">设备待机指示灯（黄色）</span>
-                                </div>
-                                <div class="m-item">
-                                    <span class="light"></span>
-                                    <span class="text">设备工作指示灯（绿色）</span>
-                                </div>
-                                <div class="m-item">
-                                    <span class="light"></span>
-                                    <span class="text">设备故障指示灯（红色）</span>
-                                </div>
-                            </div>
-                            <div class="m-info">
-                                <img width="100%" src="./console.png" alt="" srcset="" />
-                                <img width="100%" src="./console1.png" alt="" srcset="" />
-                            </div>
-                            <div class="m-ind">
-                                <div class="m-item">
-                                    <span class="light"></span>
-                                    <span class="text">未运行</span>
-                                </div>
-                                <div class="m-item">
-                                    <span class="light"></span>
-                                    <span class="text">正在运行</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="page">
-                        <div class="main">
+                        <div class="page">
                             <div class="m-data">
                                 <div class="m-item">
                                     <span class="name">发送频点：</span>
@@ -401,6 +373,44 @@
                         </div>
                     </div>
                 </div>
+                <div class="side">
+                    <div class="m-dc">
+                        <span>USRP设备控制：</span>
+                        <div class="m-btns">
+                            <button class="u-btn">启动</button>
+                            <button class="u-btn">待机</button>
+                            <button class="u-btn">关机</button>
+                        </div>
+                    </div>
+                    <div class="m-status">
+                        <div class="m-item">
+                            <span class="light"></span>
+                            <span class="text">设备待机指示灯（黄色）</span>
+                        </div>
+                        <div class="m-item">
+                            <span class="light"></span>
+                            <span class="text">设备工作指示灯（绿色）</span>
+                        </div>
+                        <div class="m-item">
+                            <span class="light"></span>
+                            <span class="text">设备故障指示灯（红色）</span>
+                        </div>
+                    </div>
+                    <div class="m-info">
+                        <img width="100%" src="./console.png" alt="" srcset="" />
+                        <img width="100%" src="./console1.png" alt="" srcset="" />
+                    </div>
+                    <div class="m-ind">
+                        <div class="m-item">
+                            <span class="light"></span>
+                            <span class="text">未运行</span>
+                        </div>
+                        <div class="m-item">
+                            <span class="light"></span>
+                            <span class="text">正在运行</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -420,11 +430,11 @@
                 }
                 if (prev != curr) {
                     pages[prev - 1].className = "page";
-                    tabs[prev - 1].style.textDecoration = "none";
+                    tabs[prev - 1].className = "";
                 }
                 if (curr > 0 && curr <= pages.length) {
                     pages[curr - 1].className = "page active";
-                    tabs[curr - 1].style.textDecoration = "underline";
+                    tabs[curr - 1].className = "active";
                 }
 
                 return curr;
