@@ -47,7 +47,7 @@ const wss = new WebSocket.Server({ port: 8080 });
 // 监听连接事件
 wss.on('connection', (ws) => {
 
-	let data = [4000, 5300, 53, 53, 400, 400, 491.52, "internal", "internal", [0, 0, 0, 0, 0, 0, 0, 0]];
+	let data = [4000, 5300, 53, 53, 400, 400, 491.52, "internal", "internal", [0, 0, 1, 0, 0, 1, 0, 0]];
 	// 监听消息事件
 	ws.on('message', (message) => {
 		// let arr = message.toString().split(" ");
@@ -56,16 +56,13 @@ wss.on('connection', (ws) => {
 		console.log(mess);
 
 		if (mess[1] == "a") {
-			data = getData(mess);
+			getData(mess);
 
 		}
 
 		if (mess[1] == "b") {
-			let bt = "";
-			data[9].forEach((item, index) => {
-				bt += item;
-			});
-			ws.send(`"12345678 a f_send ${data[0]} f_recv ${data[1]} g_send ${data[2]} g_recv ${data[3]} f_send ${data[4]} f_recv ${data[5]} s_rate ${data[6]} ${data[7]} ${data[8]} ${bt}`);
+
+			ws.send(`"12345678 a f_send ${data[0]} f_recv ${data[1]} g_send ${data[2]} g_recv ${data[3]} f_send ${data[4]} f_recv ${data[5]} s_rate ${data[6]} ${data[7]} ${data[8]} ${data[9].join('')}`);
 		}
 
 		function getData(mess) {

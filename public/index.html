@@ -660,7 +660,7 @@
                 socket.onmessage = function (event) {
                     logMessage("收到服务器消息: " + event.data + "");
                     let message = event.data.split(" ");
-
+                    console.log(message);
                     inputs[9].value = message[3];
                     inputs[10].value = message[5];
                     inputs[11].value = message[7];
@@ -670,6 +670,11 @@
                     inputs[15].value = message[15];
                     inputs[16].value = message[16];
                     inputs[17].value = message[17];
+
+                    [...message[18]].forEach(function (item, index) {
+                        console.log(item, item == "1");
+                        if (item == "1") menus[8 + index].style.backgroundColor = "green";
+                    });
                 };
 
                 socket.onclose = function (event) {
