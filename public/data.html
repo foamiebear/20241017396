@@ -410,6 +410,7 @@
         </div>
 
         <script>
+            let data = [4000, 5300, 53, 53, 400, 400, 491.52, "internal", "internal", [0, 0, 0, 0, 0, 0, 0, 0]];
             var usrp = {
                 _tabs: null,
                 data: { sendFreq: "123.856", recvFreq: "12331.54", sendGain: "52", recvGain: "56", sendBandwidth: "72", recvBandwidth: "245", sampleRate: "36.2", refClock: "gpsdo", refPps: "mimo" },
@@ -567,15 +568,25 @@
             function unbundle() {
                 let data = usrp.data;
 
-                inputs[9].value = data.sendFreq;
-                inputs[10].value = data.recvFreq;
-                inputs[11].value = data.sendGain;
-                inputs[12].value = data.recvGain;
-                inputs[13].value = data.sendBandwidth;
-                inputs[14].value = data.recvBandwidth;
-                inputs[15].value = data.sampleRate;
-                inputs[16].value = data.refClock;
-                inputs[17].value = data.refPps;
+                // inputs[9].value = data.sendFreq;
+                // inputs[10].value = data.recvFreq;
+                // inputs[11].value = data.sendGain;
+                // inputs[12].value = data.recvGain;
+                // inputs[13].value = data.sendBandwidth;
+                // inputs[14].value = data.recvBandwidth;
+                // inputs[15].value = data.sampleRate;
+                // inputs[16].value = data.refClock;
+                // inputs[17].value = data.refPps;
+
+                input[0].value = data.sendFreq;
+                input[1].value = data.recvFreq;
+                input[2].value = data.sendGain;
+                input[3].value = data.recvGain;
+                input[4].value = data.sendBandwidth;
+                input[5].value = data.recvBandwidth;
+                input[6].value = data.sampleRate;
+                input[7].value = data.refClock;
+                input[8].value = data.refPps;
             }
 
             document.querySelector(".m-data > .in-conf").addEventListener("click", bundle);

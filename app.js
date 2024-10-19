@@ -46,8 +46,8 @@ const wss = new WebSocket.Server({ port: 8080 });
 
 // 监听连接事件
 wss.on('connection', (ws) => {
-	console.log('Client connected');
-	let data = null;
+
+	let data = [4000, 5300, 53, 53, 400, 400, 491.52, "internal", "internal", [0, 0, 0, 0, 0, 0, 0, 0]];
 	// 监听消息事件
 	ws.on('message', (message) => {
 		// let arr = message.toString().split(" ");
@@ -61,22 +61,23 @@ wss.on('connection', (ws) => {
 		}
 
 		if (mess[1] == "b") {
-			ws.send(`"12345678 a f_send ${data.sendFreq} f_recv ${data.recvFreq} g_send ${data.sendGain} g_recv ${data.recvGain} f_send ${data.sendBandwidth} f_recv ${data.recvBandwidth} s_rate ${data.sampleRate} ${data.refClock} ${data.refPps}`);
+			let bt = "";
+			data[9].forEach((item, index) => {
+				bt += item;
+			});
+			ws.send(`"12345678 a f_send ${data[0]} f_recv ${data[1]} g_send ${data[2]} g_recv ${data[3]} f_send ${data[4]} f_recv ${data[5]} s_rate ${data[6]} ${data[7]} ${data[8]} ${bt}`);
 		}
 
 		function getData(mess) {
-			return {
-				"sendFreq": mess[3],
-				"recvFreq": mess[5],
-				"sendGain": mess[7],
-				"recvGain": mess[9],
-				"sendBandwidth": mess[11],
-				"recvBandwidth": mess[13],
-				"sampleRate": mess[15],
-				"refClock": mess[16],
-				"refPps": mess[17]
-
-			}
+			data[0] = mess[3];
+			data[1] = mess[5];
+			data[2] = mess[7];
+			data[3] = mess[9];
+			data[4] = mess[11];
+			data[5] = mess[13];
+			data[6] = mess[15];
+			data[7] = mess[16];
+			data[8] = mess[17];
 		}
 	});
 
